@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Khatma — خَتمة | Quran & Group Completion</title>
+<meta name="description" content="Complete the Quran together. Khatma is a beautiful Quran reader and group Khatm app for Muslim youth.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cairo:wght@300;400;600;700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-pale: #F5E09A;
+  --bg: #0A0A0F;
+  --surface: #12121A;
+  --card: #1A1A26;
+  --text: #F0EDE4;
+  --muted: rgba(240,237,228,0.5);
+  --border: rgba(201,168,76,0.15);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* Custom cursor */
+.cursor {
+  position: fixed;
+  width: 8px; height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.1s;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  position: fixed;
+  width: 32px; height: 32px;
+  border: 1px solid var(--gold);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+  opacity: 0.6;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1;
+  opacity: 0.4;
+}
+
+/* NAV */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  padding: 24px 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid transparent;
+  transition: all 0.4s;
+}
+nav.scrolled {
+  background: rgba(10,10,15,0.85);
+  backdrop-filter: blur(20px);
+  border-color: var(--border);
+  padding: 16px 60px;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold-light);
+  letter-spacing: 0.02em;
+}
+.nav-logo span {
+  font-family: 'Cairo', sans-serif;
+  font-size: 18px;
+  color: var(--muted);
+  margin-right: 8px;
+}
+.nav-links {
+  display: flex;
+  gap: 40px;
+  list-style: none;
+}
+.nav-links a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: color 0.2s;
+}
+.nav-links a:hover { color: var(--gold); }
+
+/* HERO */
+.hero {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  padding: 120px 60px 80px;
+  overflow: hidden;
+}
+
+/* Geometric background pattern */
+.hero-pattern {
+  position: absolute;
+  inset: 0;
+  opacity: 0.04;
+  background-image:
+    repeating-linear-gradient(0deg, var(--gold) 0px, transparent 1px, transparent 60px),
+    repeating-linear-gradient(90deg, var(--gold) 0px, transparent 1px, transparent 60px);
+}
+
+.hero-glow {
+  position: absolute;
+  top: 20%;
+  right: 10%;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(201,168,76,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  max-width: 680px;
+}
+
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 12px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 40px;
+  animation: fadeUp 0.8s ease both;
+}
+.hero-badge::before {
+  content: '';
+  width: 6px; height: 6px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.5); }
+}
+
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(56px, 8vw, 96px);
+  font-weight: 900;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  margin-bottom: 12px;
+  animation: fadeUp 0.8s 0.1s ease both;
+}
+.hero-title .ar {
+  display: block;
+  font-family: 'Cairo', sans-serif;
+  font-size: clamp(40px, 5vw, 64px);
+  font-weight: 700;
+  color: var(--gold);
+  letter-spacing: 0;
+  margin-bottom: 8px;
+}
+.hero-title .en {
+  display: block;
+  background: linear-gradient(135deg, var(--text) 0%, var(--muted) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 480px;
+  margin-bottom: 56px;
+  font-weight: 300;
+  animation: fadeUp 0.8s 0.2s ease both;
+}
+
+.hero-cta {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  animation: fadeUp 0.8s 0.3s ease both;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  background: linear-gradient(135deg, var(--gold) 0%, var(--gold-light) 100%);
+  color: #0A0A0F;
+  font-weight: 600;
+  font-size: 15px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s;
+  letter-spacing: 0.02em;
+}
+.btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 20px 40px rgba(201,168,76,0.3);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 32px;
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 15px;
+  border-radius: 12px;
+  text-decoration: none;
+  transition: all 0.3s;
+}
+.btn-ghost:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+
+/* Floating phone mockup */
+.hero-visual {
+  position: absolute;
+  right: 8%;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(-50%) translateY(0px); }
+  50% { transform: translateY(-50%) translateY(-20px); }
+}
+
+.phone-mockup {
+  width: 280px;
+  height: 580px;
+  background: var(--card);
+  border-radius: 44px;
+  border: 1px solid var(--border);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 0 0 1px rgba(201,168,76,0.1),
+    0 40px 80px rgba(0,0,0,0.6),
+    inset 0 1px 0 rgba(201,168,76,0.2);
+}
+
+.phone-notch {
+  position: absolute;
+  top: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 100px; height: 28px;
+  background: #0A0A0F;
+  border-radius: 20px;
+  z-index: 2;
+}
+
+.phone-screen {
+  position: absolute;
+  inset: 0;
+  padding: 60px 20px 20px;
+  background: linear-gradient(180deg, #0A0A0F 0%, #12121A 100%);
+}
+
+.phone-appbar {
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 20px;
+}
+
+.phone-hero-card {
+  background: linear-gradient(135deg, rgba(201,168,76,0.7), rgba(232,201,122,0.4));
+  border-radius: 16px;
+  padding: 16px;
+  margin-bottom: 20px;
+  position: relative;
+  overflow: hidden;
+}
+.phone-hero-card::after {
+  content: '🕌';
+  position: absolute;
+  right: 12px; bottom: 4px;
+  font-size: 48px;
+  opacity: 0.2;
+}
+.phone-hero-card .label {
+  font-size: 10px;
+  color: rgba(10,10,15,0.7);
+  font-family: 'Cairo', sans-serif;
+  margin-bottom: 4px;
+}
+.phone-hero-card .surah {
+  font-family: 'Cairo', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #0A0A0F;
+}
+
+.phone-tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.phone-tab {
+  flex: 1;
+  text-align: center;
+  font-family: 'Cairo', sans-serif;
+  font-size: 10px;
+  padding: 6px;
+  border-radius: 8px;
+  color: var(--muted);
+}
+.phone-tab.active {
+  background: rgba(201,168,76,0.15);
+  color: var(--gold);
+}
+
+.phone-list-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(201,168,76,0.06);
+}
+.phone-num {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: rgba(201,168,76,0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  color: var(--gold);
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.phone-surah-name {
+  font-family: 'Cairo', sans-serif;
+  font-size: 12px;
+  color: var(--text);
+  font-weight: 600;
+}
+.phone-surah-sub {
+  font-size: 9px;
+  color: var(--muted);
+  font-family: 'Cairo', sans-serif;
+}
+
+/* FEATURES */
+.section {
+  padding: 120px 60px;
+  position: relative;
+}
+
+.section-label {
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.section-label::before {
+  content: '';
+  width: 24px; height: 1px;
+  background: var(--gold);
+}
+
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(36px, 5vw, 56px);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 20px;
+  max-width: 600px;
+}
+
+.section-sub {
+  font-size: 16px;
+  color: var(--muted);
+  max-width: 480px;
+  line-height: 1.7;
+  font-weight: 300;
+  margin-bottom: 80px;
+}
+
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.feature-card {
+  background: var(--bg);
+  padding: 48px 40px;
+  transition: background 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+.feature-card:hover { background: var(--surface); }
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.feature-card:hover::before { opacity: 1; }
+
+.feature-icon {
+  width: 48px; height: 48px;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  margin-bottom: 24px;
+  background: rgba(201,168,76,0.06);
+}
+
+.feature-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.feature-desc {
+  font-size: 14px;
+  color: var(--muted);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* KHATMA SECTION */
+.khatma-section {
+  padding: 120px 60px;
+  background: var(--surface);
+  position: relative;
+  overflow: hidden;
+}
+
+.khatma-section::before {
+  content: 'خَتمة';
+  position: absolute;
+  font-family: 'Cairo', sans-serif;
+  font-size: 300px;
+  font-weight: 700;
+  color: var(--gold);
+  opacity: 0.02;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.khatma-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.juz-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 8px;
+}
+
+.juz-cell {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold);
+  border: 1px solid rgba(201,168,76,0.12);
+  background: var(--card);
+  transition: all 0.3s;
+  cursor: default;
+  position: relative;
+}
+.juz-cell:hover { transform: scale(1.05); }
+
+.juz-cell.done {
+  background: rgba(46,204,113,0.12);
+  border-color: rgba(46,204,113,0.4);
+  color: #2ECC71;
+}
+.juz-cell.reading {
+  background: rgba(201,168,76,0.12);
+  border-color: rgba(201,168,76,0.5);
+  animation: borderPulse 2s infinite;
+}
+.juz-cell.empty { opacity: 0.3; }
+
+@keyframes borderPulse {
+  0%, 100% { border-color: rgba(201,168,76,0.5); }
+  50% { border-color: rgba(201,168,76,1); }
+}
+
+.juz-avatar {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: var(--gold);
+  font-size: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0A0A0F;
+  font-weight: 700;
+}
+
+/* STATS */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  overflow: hidden;
+  margin-top: 80px;
+}
+
+.stat-card {
+  background: var(--bg);
+  padding: 48px 32px;
+  text-align: center;
+}
+
+.stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 48px;
+  font-weight: 900;
+  color: var(--gold);
+  line-height: 1;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, var(--gold-pale), var(--gold));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-label {
+  font-size: 13px;
+  color: var(--muted);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+/* PRIVACY POLICY */
+.privacy-section {
+  padding: 120px 60px;
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.privacy-section h2 {
+  font-family: 'Playfair Display', serif;
+  font-size: 42px;
+  font-weight: 700;
+  margin-bottom: 16px;
+}
+
+.privacy-section .effective {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 60px;
+  letter-spacing: 0.05em;
+}
+
+.privacy-block {
+  margin-bottom: 48px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+}
+.privacy-block:last-child { border-bottom: none; }
+
+.privacy-block h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--gold-light);
+  margin-bottom: 16px;
+}
+
+.privacy-block p {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+  margin-bottom: 12px;
+}
+
+.privacy-block ul {
+  list-style: none;
+  padding: 0;
+}
+
+.privacy-block ul li {
+  font-size: 15px;
+  color: var(--muted);
+  line-height: 1.8;
+  font-weight: 300;
+  padding: 4px 0;
+  padding-left: 20px;
+  position: relative;
+}
+
+.privacy-block ul li::before {
+  content: '—';
+  position: absolute;
+  left: 0;
+  color: var(--gold);
+  font-size: 12px;
+}
+
+/* FOOTER */
+footer {
+  padding: 60px;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  color: var(--gold-light);
+}
+
+.footer-links {
+  display: flex;
+  gap: 32px;
+}
+
+.footer-links a {
+  font-size: 13px;
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.footer-links a:hover { color: var(--gold); }
+
+.footer-copy {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.reveal {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* DIVIDER */
+.gold-divider {
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  opacity: 0.3;
+}
+
+/* RESPONSIVE */
+@media (max-width: 1024px) {
+  .hero-visual { display: none; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .khatma-grid { grid-template-columns: 1fr; }
+  nav { padding: 20px 30px; }
+  .section { padding: 80px 30px; }
+  .hero { padding: 120px 30px 80px; }
+  .khatma-section { padding: 80px 30px; }
+  .stats-row { grid-template-columns: repeat(2, 1fr); }
+  footer { flex-direction: column; gap: 24px; text-align: center; }
+  .footer-links { flex-wrap: wrap; justify-content: center; }
+}
+
+@media (max-width: 640px) {
+  .features-grid { grid-template-columns: 1fr; }
+  .nav-links { display: none; }
+  .juz-grid { grid-template-columns: repeat(5, 1fr); }
+  .privacy-section { padding: 80px 24px; }
+}
+</style>
+</head>
+<body>
+
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <div class="nav-logo">Khatma <span>خَتمة</span></div>
+  <ul class="nav-links">
+    <li><a href="#features">Features</a></li>
+    <li><a href="#khatma">Group Khatm</a></li>
+    <li><a href="#privacy">Privacy</a></li>
+  </ul>
+  <a href="https://en.aptoide.com" class="btn-primary" style="padding:10px 24px;font-size:13px" target="_blank">Download</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-glow"></div>
+
+  <div class="hero-content">
+    <div class="hero-badge">Now Available</div>
+    <h1 class="hero-title">
+      <span class="ar">خَتمة</span>
+      <span class="en">Complete<br>Together.</span>
+    </h1>
+    <p class="hero-sub">
+      A beautiful Quran reader and group completion app for Muslim youth. Read, listen, and complete the Quran with your friends and family.
+    </p>
+    <div class="hero-cta" id="download">
+      <a href="https://en.aptoide.com" class="btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
+        Download on Aptoide
+      </a>
+    </div>
+  </div>
+
+  <!-- Phone mockup -->
+  <div class="hero-visual">
+    <div class="phone-mockup">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <div class="phone-appbar">القرآن الكريم</div>
+        <div class="phone-hero-card">
+          <div class="label">آخر ما قرأت</div>
+          <div class="surah">سورة البقرة</div>
+          <div style="font-family:Cairo,sans-serif;font-size:11px;color:rgba(10,10,15,0.6);margin-top:2px">الآية 255</div>
+        </div>
+        <div class="phone-tabs">
+          <div class="phone-tab active">سورة</div>
+          <div class="phone-tab">جزء</div>
+          <div class="phone-tab">صفحة</div>
+          <div class="phone-tab">علامة</div>
+        </div>
+        <div class="phone-list-item">
+          <div class="phone-num">١</div>
+          <div>
+            <div class="phone-surah-name">الفاتحة</div>
+            <div class="phone-surah-sub">٧ آيات · مكية</div>
+          </div>
+        </div>
+        <div class="phone-list-item">
+          <div class="phone-num">٢</div>
+          <div>
+            <div class="phone-surah-name">البقرة</div>
+            <div class="phone-surah-sub">٢٨٦ آية · مدنية</div>
+          </div>
+        </div>
+        <div class="phone-list-item">
+          <div class="phone-num">٣</div>
+          <div>
+            <div class="phone-surah-name">آل عمران</div>
+            <div class="phone-surah-sub">٢٠٠ آية · مدنية</div>
+          </div>
+        </div>
+        <div class="phone-list-item">
+          <div class="phone-num">٤</div>
+          <div>
+            <div class="phone-surah-name">النساء</div>
+            <div class="phone-surah-sub">١٧٦ آية · مدنية</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- FEATURES -->
+<section class="section" id="features">
+  <div class="section-label reveal">Core Features</div>
+  <h2 class="section-title reveal">Everything you need<br>to connect with the Quran.</h2>
+  <p class="section-sub reveal">Built for Muslim youth who want a focused, distraction-free experience.</p>
+
+  <div class="features-grid reveal">
+    <div class="feature-card">
+      <div class="feature-icon">📖</div>
+      <div class="feature-title">Uthmani Script</div>
+      <div class="feature-desc">Authentic KFGQPC Uthmanic Hafs font across all 604 Madani Mushaf pages. Adjustable size for comfortable reading.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🎧</div>
+      <div class="feature-title">Audio Recitation</div>
+      <div class="feature-desc">Stream from top reciters including Al-Afasy, Abdul Basit, and Al-Husary. Per-ayah repeat with custom range.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌙</div>
+      <div class="feature-title">Prayer Times</div>
+      <div class="feature-desc">Accurate prayer times and Qibla direction based on your real-time location. Hijri calendar included.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">👥</div>
+      <div class="feature-title">Group Khatma</div>
+      <div class="feature-desc">Invite up to 30 friends. Each takes a juz. Track everyone's progress in real-time until completion.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-title">Offline First</div>
+      <div class="feature-desc">All Quran text, translations (EN/FR), and Tafsir bundled locally. Read without internet, always.</div>
+    </div>
+    <div class="feature-card">
+      <div class="feature-icon">✨</div>
+      <div class="feature-title">Ramadan Wrapped</div>
+      <div class="feature-desc">A shareable stats card at the end of Ramadan showing your reading streak, pages, and completed khatmas.</div>
+    </div>
+  </div>
+
+  <div class="stats-row reveal">
+    <div class="stat-card">
+      <div class="stat-number">604</div>
+      <div class="stat-label">Mushaf Pages</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">114</div>
+      <div class="stat-label">Surahs</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">30</div>
+      <div class="stat-label">Juz per Khatma</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-number">0</div>
+      <div class="stat-label">Ads. Ever.</div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- KHATMA SECTION -->
+<section class="khatma-section" id="khatma">
+  <div class="khatma-grid">
+    <div>
+      <div class="section-label reveal">Group Feature</div>
+      <h2 class="section-title reveal" style="max-width:400px">Complete the Quran. Together.</h2>
+      <p class="section-sub reveal" style="margin-bottom:32px">Create a group, share a 4-digit code, and each member takes a juz. Watch the progress update in real-time until the final juz is complete.</p>
+      <a href="#download" class="btn-primary reveal" style="display:inline-flex">Start a Khatma →</a>
+    </div>
+
+    <div class="reveal">
+      <div style="background:var(--card);border:1px solid var(--border);border-radius:20px;padding:32px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px">
+          <div style="font-family:Cairo,sans-serif;font-size:16px;font-weight:700;">ختمة رمضان ١٤٤٧</div>
+          <div style="background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:100px;padding:4px 12px;font-size:12px;color:var(--gold);letter-spacing:0.1em">ABCD</div>
+        </div>
+
+        <div class="juz-grid">
+          <!-- Done cells -->
+          <div class="juz-cell done">١<div class="juz-avatar">أ</div></div>
+          <div class="juz-cell done">٢<div class="juz-avatar">م</div></div>
+          <div class="juz-cell done">٣<div class="juz-avatar">س</div></div>
+          <div class="juz-cell done">٤<div class="juz-avatar">ي</div></div>
+          <div class="juz-cell done">٥<div class="juz-avatar">ف</div></div>
+          <div class="juz-cell done">٦<div class="juz-avatar">أ</div></div>
+          <div class="juz-cell done">٧<div class="juz-avatar">م</div></div>
+          <div class="juz-cell done">٨<div class="juz-avatar">س</div></div>
+          <div class="juz-cell reading">٩<div class="juz-avatar">ي</div></div>
+          <div class="juz-cell reading">١٠<div class="juz-avatar">ف</div></div>
+          <!-- Empty cells -->
+          <div class="juz-cell empty">١١</div>
+          <div class="juz-cell empty">١٢</div>
+          <div class="juz-cell empty">١٣</div>
+          <div class="juz-cell empty">١٤</div>
+          <div class="juz-cell empty">١٥</div>
+          <div class="juz-cell empty">١٦</div>
+          <div class="juz-cell empty">١٧</div>
+          <div class="juz-cell empty">١٨</div>
+          <div class="juz-cell empty">١٩</div>
+          <div class="juz-cell empty">٢٠</div>
+          <div class="juz-cell empty">٢١</div>
+          <div class="juz-cell empty">٢٢</div>
+          <div class="juz-cell empty">٢٣</div>
+          <div class="juz-cell empty">٢٤</div>
+          <div class="juz-cell empty">٢٥</div>
+          <div class="juz-cell empty">٢٦</div>
+          <div class="juz-cell empty">٢٧</div>
+          <div class="juz-cell empty">٢٨</div>
+          <div class="juz-cell empty">٢٩</div>
+          <div class="juz-cell empty">٣٠</div>
+        </div>
+
+        <div style="margin-top:24px">
+          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px;font-family:Cairo,sans-serif">
+            <span>تم الإنجاز: ٨ من ٣٠ جزءاً</span>
+            <span style="color:var(--gold)">27%</span>
+          </div>
+          <div style="height:4px;background:var(--surface);border-radius:2px;overflow:hidden">
+            <div style="height:100%;width:27%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="gold-divider"></div>
+
+<!-- PRIVACY POLICY -->
+<section class="privacy-section" id="privacy">
+  <div class="section-label" style="justify-content:flex-start">Legal</div>
+  <h2>Privacy Policy</h2>
+  <p class="effective">Effective date: January 1, 2025 · Last updated: March 2026</p>
+
+  <div class="privacy-block">
+    <h3>1. Introduction</h3>
+    <p>Khatma ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use the Khatma mobile application ("App").</p>
+    <p>By using Khatma, you agree to the collection and use of information in accordance with this policy.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>2. Information We Collect</h3>
+    <p>We collect only what is necessary to provide our service:</p>
+    <ul>
+      <li><strong>Account information:</strong> Email address and display name when you create an account</li>
+      <li><strong>Reading progress:</strong> Current surah, ayah, and page number to sync your progress</li>
+      <li><strong>Bookmarks:</strong> Saved ayahs and personal notes you create</li>
+      <li><strong>Reading sessions:</strong> Duration and pages read per session for your personal stats</li>
+      <li><strong>Location:</strong> Used only for prayer times and Qibla direction — never stored on our servers</li>
+      <li><strong>Group data:</strong> Khatma group name, members, and juz completion status</li>
+    </ul>
+  </div>
+
+  <div class="privacy-block">
+    <h3>3. How We Use Your Information</h3>
+    <ul>
+      <li>To provide and maintain the App's functionality</li>
+      <li>To sync your reading progress across devices</li>
+      <li>To enable group Khatma features with real-time updates</li>
+      <li>To generate your personal Ramadan Wrapped statistics</li>
+      <li>To send prayer time calculations (processed on-device)</li>
+      <li>To improve the App based on usage patterns</li>
+    </ul>
+  </div>
+
+  <div class="privacy-block">
+    <h3>4. Data Storage & Security</h3>
+    <p>Your data is stored securely using Supabase (PostgreSQL) with Row-Level Security (RLS) enabled. This means each user can only access their own data. We use industry-standard encryption for data in transit (HTTPS/TLS).</p>
+    <p>The complete Quran text, translations, and Tafsir are bundled locally within the app — we never transmit Quran content data to any server.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>5. Third-Party Services</h3>
+    <p>Khatma uses the following third-party services:</p>
+    <ul>
+      <li><strong>Supabase:</strong> Authentication and database — <a href="https://supabase.com/privacy" style="color:var(--gold)">privacy policy</a></li>
+      <li><strong>Google Sign-In:</strong> Optional OAuth authentication — <a href="https://policies.google.com/privacy" style="color:var(--gold)">privacy policy</a></li>
+      <li><strong>mp3quran.net:</strong> Quran audio streaming — no personal data shared</li>
+      <li><strong>Aladhan API:</strong> Prayer times and Qibla — only coordinates sent, no account data</li>
+    </ul>
+  </div>
+
+  <div class="privacy-block">
+    <h3>6. Location Data</h3>
+    <p>We request location permission solely to calculate accurate prayer times and Qibla direction for your area. Your precise coordinates are:</p>
+    <ul>
+      <li>Never stored on our servers</li>
+      <li>Only sent to Aladhan API to retrieve prayer time calculations</li>
+      <li>Never shared with advertisers or third parties for tracking</li>
+    </ul>
+  </div>
+
+  <div class="privacy-block">
+    <h3>7. Children's Privacy</h3>
+    <p>Khatma does not knowingly collect personal information from children under 13 years of age. If you believe a child under 13 has provided us with personal information, please contact us so we can delete it.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>8. Your Rights</h3>
+    <p>You have the right to:</p>
+    <ul>
+      <li>Access the personal data we hold about you</li>
+      <li>Request correction of inaccurate data</li>
+      <li>Request deletion of your account and all associated data</li>
+      <li>Export your reading data</li>
+    </ul>
+    <p>To exercise these rights, contact us at the email below or use the "Delete Account" option in the App settings.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>9. Advertising</h3>
+    <p>Khatma contains <strong style="color:var(--gold)">no advertisements</strong> of any kind. We do not sell your data to advertisers. Our only monetization is a voluntary Pro subscription for advanced features.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>10. Changes to This Policy</h3>
+    <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by updating the date at the top of this page and, where appropriate, through an in-app notification.</p>
+  </div>
+
+  <div class="privacy-block">
+    <h3>11. Contact Us</h3>
+    <p>If you have questions about this Privacy Policy or your personal data, please contact us:</p>
+    <p style="color:var(--gold);margin-top:8px">team@khatma.qzz.io</p>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<div class="gold-divider"></div>
+<footer>
+  <div class="footer-logo">Khatma · خَتمة</div>
+  <div class="footer-links">
+    <a href="#features">Features</a>
+    <a href="#khatma">Group Khatm</a>
+    <a href="#privacy">Privacy Policy</a>
+    <a href="mailto:team@khatma.qzz.io">Contact</a>
+  </div>
+  <div class="footer-copy">© 2026 Khatma. Made with ☪ for the Ummah.</div>
+</footer>
+
+<script>
+// Custom cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx - 4 + 'px';
+  cursor.style.top  = my - 4 + 'px';
+});
+
+function animateRing() {
+  rx += (mx - rx) * 0.12;
+  ry += (my - ry) * 0.12;
+  ring.style.left = rx - 16 + 'px';
+  ring.style.top  = ry - 16 + 'px';
+  requestAnimationFrame(animateRing);
+}
+animateRing();
+
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'scale(2.5)';
+    ring.style.transform = 'scale(1.5)';
+    ring.style.opacity = '0.3';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'scale(1)';
+    ring.style.transform = 'scale(1)';
+    ring.style.opacity = '0.6';
+  });
+});
+
+// Nav scroll
+const navbar = document.getElementById('navbar');
+window.addEventListener('scroll', () => {
+  navbar.classList.toggle('scrolled', window.scrollY > 50);
+});
+
+// Reveal on scroll
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.1 });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
