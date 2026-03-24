@@ -18,6 +18,7 @@
   --text: #F0EDE4;
   --muted: rgba(240,237,228,0.5);
   --border: rgba(201,168,76,0.15);
+  --error: #e74c3c;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -122,7 +123,6 @@ nav.scrolled {
   overflow: hidden;
 }
 
-/* Geometric background pattern */
 .hero-pattern {
   position: absolute;
   inset: 0;
@@ -764,7 +764,7 @@ footer {
     <li><a href="#khatma">Group Khatm</a></li>
     <li><a href="#privacy">Privacy</a></li>
   </ul>
-  <a href="https://en.aptoide.com" class="btn-primary" style="padding:10px 24px;font-size:13px" target="_blank">Download</a>
+  <a href="#download" class="btn-primary" style="padding:10px 24px;font-size:13px">Download</a>
 </nav>
 
 <!-- HERO -->
@@ -782,10 +782,10 @@ footer {
       A beautiful Quran reader and group completion app for Muslim youth. Read, listen, and complete the Quran with your friends and family.
     </p>
     <div class="hero-cta" id="download">
-      <a href="https://en.aptoide.com" class="btn-primary" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 14H9V8h2v8zm4 0h-2V8h2v8z"/></svg>
-        Download on Aptoide
+      <a href="https://play.google.com/store/apps/details?id=com.omar.khatma" class="btn-primary" target="_blank">
+        Get it on Google Play
       </a>
+      <a href="#features" class="btn-ghost">Explore Features</a>
     </div>
   </div>
 
@@ -879,25 +879,6 @@ footer {
       <div class="feature-desc">A shareable stats card at the end of Ramadan showing your reading streak, pages, and completed khatmas.</div>
     </div>
   </div>
-
-  <div class="stats-row reveal">
-    <div class="stat-card">
-      <div class="stat-number">604</div>
-      <div class="stat-label">Mushaf Pages</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">114</div>
-      <div class="stat-label">Surahs</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">30</div>
-      <div class="stat-label">Juz per Khatma</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-number">0</div>
-      <div class="stat-label">Ads. Ever.</div>
-    </div>
-  </div>
 </section>
 
 <div class="gold-divider"></div>
@@ -909,7 +890,6 @@ footer {
       <div class="section-label reveal">Group Feature</div>
       <h2 class="section-title reveal" style="max-width:400px">Complete the Quran. Together.</h2>
       <p class="section-sub reveal" style="margin-bottom:32px">Create a group, share a 4-digit code, and each member takes a juz. Watch the progress update in real-time until the final juz is complete.</p>
-      <a href="#download" class="btn-primary reveal" style="display:inline-flex">Start a Khatma →</a>
     </div>
 
     <div class="reveal">
@@ -920,169 +900,92 @@ footer {
         </div>
 
         <div class="juz-grid">
-          <!-- Done cells -->
           <div class="juz-cell done">١<div class="juz-avatar">أ</div></div>
           <div class="juz-cell done">٢<div class="juz-avatar">م</div></div>
           <div class="juz-cell done">٣<div class="juz-avatar">س</div></div>
           <div class="juz-cell done">٤<div class="juz-avatar">ي</div></div>
           <div class="juz-cell done">٥<div class="juz-avatar">ف</div></div>
           <div class="juz-cell done">٦<div class="juz-avatar">أ</div></div>
-          <div class="juz-cell done">٧<div class="juz-avatar">م</div></div>
-          <div class="juz-cell done">٨<div class="juz-avatar">س</div></div>
-          <div class="juz-cell reading">٩<div class="juz-avatar">ي</div></div>
-          <div class="juz-cell reading">١٠<div class="juz-avatar">ف</div></div>
-          <!-- Empty cells -->
+          <div class="juz-cell reading">٧<div class="juz-avatar">م</div></div>
+          <div class="juz-cell empty">٨</div>
+          <div class="juz-cell empty">٩</div>
+          <div class="juz-cell empty">١٠</div>
           <div class="juz-cell empty">١١</div>
           <div class="juz-cell empty">١٢</div>
-          <div class="juz-cell empty">١٣</div>
-          <div class="juz-cell empty">١٤</div>
-          <div class="juz-cell empty">١٥</div>
-          <div class="juz-cell empty">١٦</div>
-          <div class="juz-cell empty">١٧</div>
-          <div class="juz-cell empty">١٨</div>
-          <div class="juz-cell empty">١٩</div>
-          <div class="juz-cell empty">٢٠</div>
-          <div class="juz-cell empty">٢١</div>
-          <div class="juz-cell empty">٢٢</div>
-          <div class="juz-cell empty">٢٣</div>
-          <div class="juz-cell empty">٢٤</div>
-          <div class="juz-cell empty">٢٥</div>
-          <div class="juz-cell empty">٢٦</div>
-          <div class="juz-cell empty">٢٧</div>
-          <div class="juz-cell empty">٢٨</div>
-          <div class="juz-cell empty">٢٩</div>
-          <div class="juz-cell empty">٣٠</div>
-        </div>
-
-        <div style="margin-top:24px">
-          <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:8px;font-family:Cairo,sans-serif">
-            <span>تم الإنجاز: ٨ من ٣٠ جزءاً</span>
-            <span style="color:var(--gold)">27%</span>
-          </div>
-          <div style="height:4px;background:var(--surface);border-radius:2px;overflow:hidden">
-            <div style="height:100%;width:27%;background:linear-gradient(90deg,var(--gold),var(--gold-light));border-radius:2px;"></div>
-          </div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="gold-divider"></div>
-
 <!-- PRIVACY POLICY -->
 <section class="privacy-section" id="privacy">
-  <div class="section-label" style="justify-content:flex-start">Legal</div>
+  <div class="section-label" style="justify-content:flex-start">Legal & Privacy</div>
   <h2>Privacy Policy</h2>
   <p class="effective">Effective date: January 1, 2025 · Last updated: March 2026</p>
 
   <div class="privacy-block">
     <h3>1. Introduction</h3>
     <p>Khatma ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard your information when you use the Khatma mobile application ("App").</p>
-    <p>By using Khatma, you agree to the collection and use of information in accordance with this policy.</p>
   </div>
 
   <div class="privacy-block">
     <h3>2. Information We Collect</h3>
-    <p>We collect only what is necessary to provide our service:</p>
     <ul>
-      <li><strong>Account information:</strong> Email address and display name when you create an account</li>
-      <li><strong>Reading progress:</strong> Current surah, ayah, and page number to sync your progress</li>
-      <li><strong>Bookmarks:</strong> Saved ayahs and personal notes you create</li>
-      <li><strong>Reading sessions:</strong> Duration and pages read per session for your personal stats</li>
-      <li><strong>Location:</strong> Used only for prayer times and Qibla direction — never stored on our servers</li>
-      <li><strong>Group data:</strong> Khatma group name, members, and juz completion status</li>
+      <li><strong>Account information:</strong> Email address and display name upon registration.</li>
+      <li><strong>Reading progress:</strong> Current surah, ayah, and page numbers to sync progress via Supabase.</li>
+      <li><strong>Location:</strong> Used temporarily for prayer times and Qibla direction (never stored).</li>
+      <li><strong>Group data:</strong> Group names, member status, and completion progress.</li>
     </ul>
   </div>
 
   <div class="privacy-block">
-    <h3>3. How We Use Your Information</h3>
+    <h3>8. Your Rights & Data Control</h3>
+    <p>You have full control over your personal data. You have the right to:</p>
     <ul>
-      <li>To provide and maintain the App's functionality</li>
-      <li>To sync your reading progress across devices</li>
-      <li>To enable group Khatma features with real-time updates</li>
-      <li>To generate your personal Ramadan Wrapped statistics</li>
-      <li>To send prayer time calculations (processed on-device)</li>
-      <li>To improve the App based on usage patterns</li>
+      <li>Access the personal data we hold about you.</li>
+      <li>Request correction of inaccurate or incomplete data.</li>
+      <li><strong>Request full deletion of your account and all associated data.</strong></li>
+      <li>Export your reading statistics and history.</li>
     </ul>
+    <p>To exercise these rights, follow the instructions in the section below.</p>
   </div>
 
-  <div class="privacy-block">
-    <h3>4. Data Storage & Security</h3>
-    <p>Your data is stored securely using Supabase (PostgreSQL) with Row-Level Security (RLS) enabled. This means each user can only access their own data. We use industry-standard encryption for data in transit (HTTPS/TLS).</p>
-    <p>The complete Quran text, translations, and Tafsir are bundled locally within the app — we never transmit Quran content data to any server.</p>
-  </div>
+  <div class="privacy-block" id="delete-account" style="background: rgba(231, 76, 60, 0.05); border: 1px dashed rgba(231, 76, 60, 0.3); padding: 32px; border-radius: 12px;">
+    <h3 style="color: #E74C3C;">12. Account Deletion & Data Retention</h3>
+    <p>Google Play policies require that we provide a path for you to delete your account even if you no longer have the app installed. If you wish to permanently delete your Khatma account and all associated data, please follow one of these methods:</p>
+    
+    <div style="margin-top: 24px;">
+      <p><strong>Option A: Inside the App (Fastest)</strong></p>
+      <p style="font-size: 14px; opacity: 0.8;">Open Khatma → Go to Profile → Settings → Account → <strong>Delete Account</strong>. This will permanently erase your data from our servers.</p>
+    </div>
 
-  <div class="privacy-block">
-    <h3>5. Third-Party Services</h3>
-    <p>Khatma uses the following third-party services:</p>
-    <ul>
-      <li><strong>Supabase:</strong> Authentication and database — <a href="https://supabase.com/privacy" style="color:var(--gold)">privacy policy</a></li>
-      <li><strong>Google Sign-In:</strong> Optional OAuth authentication — <a href="https://policies.google.com/privacy" style="color:var(--gold)">privacy policy</a></li>
-      <li><strong>mp3quran.net:</strong> Quran audio streaming — no personal data shared</li>
-      <li><strong>Aladhan API:</strong> Prayer times and Qibla — only coordinates sent, no account data</li>
-    </ul>
-  </div>
+    <div style="margin-top: 24px;">
+      <p><strong>Option B: Request via Email</strong></p>
+      <p style="font-size: 14px; opacity: 0.8;">If the app is uninstalled, click the button below to send us a deletion request from your registered email address.</p>
+      <a href="mailto:support@khatma.app?subject=Account Deletion Request&body=I would like to request the permanent deletion of my Khatma account and all associated data." 
+         class="btn-ghost" 
+         style="border-color: #E74C3C; color: #E74C3C; margin-top: 16px; font-size: 13px; transform: scale(0.9); transform-origin: left;">
+         Submit Deletion Request
+      </a>
+    </div>
 
-  <div class="privacy-block">
-    <h3>6. Location Data</h3>
-    <p>We request location permission solely to calculate accurate prayer times and Qibla direction for your area. Your precise coordinates are:</p>
-    <ul>
-      <li>Never stored on our servers</li>
-      <li>Only sent to Aladhan API to retrieve prayer time calculations</li>
-      <li>Never shared with advertisers or third parties for tracking</li>
-    </ul>
-  </div>
-
-  <div class="privacy-block">
-    <h3>7. Children's Privacy</h3>
-    <p>Khatma does not knowingly collect personal information from children under 13 years of age. If you believe a child under 13 has provided us with personal information, please contact us so we can delete it.</p>
-  </div>
-
-  <div class="privacy-block">
-    <h3>8. Your Rights</h3>
-    <p>You have the right to:</p>
-    <ul>
-      <li>Access the personal data we hold about you</li>
-      <li>Request correction of inaccurate data</li>
-      <li>Request deletion of your account and all associated data</li>
-      <li>Export your reading data</li>
-    </ul>
-    <p>To exercise these rights, contact us at the email below or use the "Delete Account" option in the App settings.</p>
-  </div>
-
-  <div class="privacy-block">
-    <h3>9. Advertising</h3>
-    <p>Khatma contains <strong style="color:var(--gold)">no advertisements</strong> of any kind. We do not sell your data to advertisers. Our only monetization is a voluntary Pro subscription for advanced features.</p>
-  </div>
-
-  <div class="privacy-block">
-    <h3>10. Changes to This Policy</h3>
-    <p>We may update this Privacy Policy from time to time. We will notify you of significant changes by updating the date at the top of this page and, where appropriate, through an in-app notification.</p>
+    <p style="margin-top: 32px; font-size: 13px; font-style: italic; opacity: 0.6;">Note: Account deletion is irreversible. Once deleted, your Khatma group historical progress and data cannot be restored.</p>
   </div>
 
   <div class="privacy-block">
     <h3>11. Contact Us</h3>
-    <p>If you have questions about this Privacy Policy or your personal data, please contact us:</p>
-    <p style="color:var(--gold);margin-top:8px">team@khatma.qzz.io</p>
+    <p>Questions? Contact us at: <a href="mailto:support@khatma.app" style="color:var(--gold)">support@khatma.app</a></p>
   </div>
 </section>
 
-<!-- FOOTER -->
-<div class="gold-divider"></div>
 <footer>
   <div class="footer-logo">Khatma · خَتمة</div>
-  <div class="footer-links">
-    <a href="#features">Features</a>
-    <a href="#khatma">Group Khatm</a>
-    <a href="#privacy">Privacy Policy</a>
-    <a href="mailto:team@khatma.qzz.io">Contact</a>
-  </div>
-  <div class="footer-copy">© 2026 Khatma. Made with ☪ for the Ummah.</div>
+  <div class="footer-copy">© 2026 Khatma · Made with ☪ for the Ummah.</div>
 </footer>
 
 <script>
-// Custom cursor
+// Custom cursor logic
 const cursor = document.getElementById('cursor');
 const ring = document.getElementById('cursorRing');
 let mx = 0, my = 0, rx = 0, ry = 0;
@@ -1102,37 +1005,14 @@ function animateRing() {
 }
 animateRing();
 
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => {
-    cursor.style.transform = 'scale(2.5)';
-    ring.style.transform = 'scale(1.5)';
-    ring.style.opacity = '0.3';
-  });
-  el.addEventListener('mouseleave', () => {
-    cursor.style.transform = 'scale(1)';
-    ring.style.transform = 'scale(1)';
-    ring.style.opacity = '0.6';
-  });
-});
-
-// Nav scroll
-const navbar = document.getElementById('navbar');
-window.addEventListener('scroll', () => {
-  navbar.classList.toggle('scrolled', window.scrollY > 50);
-});
-
-// Reveal on scroll
+// Animation on scroll
 const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      e.target.classList.add('visible');
-      observer.unobserve(e.target);
-    }
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
   });
 }, { threshold: 0.1 });
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
-
 </body>
 </html>
